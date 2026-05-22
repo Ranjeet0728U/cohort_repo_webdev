@@ -1,0 +1,36 @@
+body{
+    background-color: rgb(37, 36, 36);
+    color: #ffff;
+    
+}
+#parent{
+    border: .5px solid red;
+    display: grid;
+    grid-template-columns:repeat(2,1fr) 2fr  1fr;  
+    grid-template-rows: repeat(5, 150px);
+    /* gap: 5px; */
+    
+}
+.child{
+    border: 1px solid rgb(178, 119, 129);
+    background-color: pink;
+    color: #000;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.child6{
+    /* grid-row-start: 4;
+    grid-column-start: 3;
+    grid-row-end:5;
+    grid-column-end: 5; */
+    grid-area: 4/3/5/5;
+}
+.child7{
+    /* grid-row-start: 3;
+    grid-column: 1 /-1; */
+    /* grid-area: 5 / 1 / 6 /-1; */
+    grid-area: 5/1/span 1/-1;
+}

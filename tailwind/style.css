@@ -1,0 +1,31 @@
+.par{
+    align-items: center;
+    background-color:rgb(3,3,3);
+    color:#fff;
+    border: 2px solid red;
+    display:flex;
+    width: 90vw;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#child1{
+    padding:10px
+}
+#child3{
+    padding: 10px;
+}
+#child3 button{
+    padding-right: 10px;
+}
+#share{
+    background-color: rgb(17, 17, 186);
+}
+button{
+    background-color:rgb(3,3,3);
+    color: #fff;
+    border: 1px solid white;
+}
+/* #child2 button{
+    padding: 0px;
+    
+} */
