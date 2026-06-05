@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p id="Demo">Ranjeet Upadhyay</p>
+    <button id="btn">toggle</button>
+</body>
+<script>
+    let isToggle = false;
+
+    document.getElementById('btn').addEventListener('click', function(){
+        let current = document.getElementById('Demo');
+        if(!isToggle){
+            const h1 = document.createElement('h1');
+            h1.id = "Demo";
+            h1.innerText = "This is Ranjeet";
+            console.log(h1.innerText);
+            current.replaceWith(h1);
+        }else{
+            const p = document.createElement('p');
+            p.id = "Demo";
+            p.innerText = "Hi this is Ranjeet";
+            console.log(p.innerText);
+            current.replaceWith(p);
+        }
+        isToggle = !isToggle;
+    });
+    document.getElementById('Demo').addEventListener('click',function(){
+        const demo = document.getElementById('Demo');
+        if(!isToggle){
+            demo.style.color = "yellow";
+        }else{
+            demo.style.color = "pink";
+            console.log("pink")
+        }
+    })
+    
+</script>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-color: black;
+            color: white;
+        }
+        div{
+            margin-left: 500px;
+            margin-right: 500px;
+            margin-top: 100px;
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            background-color: blue;
+            align-items: center;
+            border: black;
+            border-radius: 10px;
+        }
+        #InputContainer{
+            width: 200px;
+            border: 1px solid white;
+            background-color: #222;
+            color: white;
+        }
+        #Button{
+            width: 200px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #Button:hover{
+            opacity: 0.8;
+        }
+        #ListContainer{
+            width: 400px;
+            margin: 20px auto;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #ListContainer li{
+            background-color: #222;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+        }
+        #ListContainer li:hover{
+            background-color: rgb(16, 107, 107);
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <input type="text" placeholder="Enter your TO DO list"  id="InputContainer">
+        <button id="Button">Enter</button>
+    </div>
+    <ol id = "ListContainer"> </ol>
+    <script>
+        const InputRef = document.getElementById("InputContainer");
+        const ButtonRef = document.getElementById("Button");
+        const ListRef = document.getElementById("ListContainer");
+
+        (async()=>{
+            const responst = fetch('https://api.freeapi.app/api/v1/public/quotes',{
+                method:'GET',
+            }).then(response => response.json())
+            .then((data) =>{
+                for( const ele of data.data.data){
+                    const qut = ele.content;
+                    addEle(qut);
+                    
+                }
+            });
+
+        })();
+
+        ButtonRef.addEventListener('click', addTask);
+
+        InputRef.addEventListener('keydown',function(event){
+            if(event.key === 'Enter'){
+                addTask();
+            }
+        });
+
+        function addTask(){
+            const value = InputRef.value; // reference se value lena
+            if(value.trim() == ''){
+                alert('Enter a Valid Task')
+                return
+            }
+            addEle(value);
+        }
+        function addEle(value){
+            const liRef = document.createElement('li'); // naya html value create huaa
+            liRef.addEventListener('click',function(){
+                liRef.remove();
+            })
+
+            //Element ka value add krna
+            liRef.innerText = value;
+            ListRef.appendChild(liRef);
+            InputRef.value = '';
+        }
+    </script>
+</body>
+</html>

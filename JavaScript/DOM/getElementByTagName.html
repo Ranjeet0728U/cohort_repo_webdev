@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <p id="Demo">Ranjeet Upadhyay</p>
+    <p id="Demo">Ranjeet Upadhyay</p>
+    <p id="Demo">Manjeet Upadhyay</p>
+    <p id="Demo">Manjeet Upadhyay</p>
+    <p>Rupesh <b>Kumar</b></p>
+</body>
+<script>
+    const myPara = document.getElementsByTagName('p'); 
+
+    console.log("Element is that :- ", myPara.length); //Element is that :-  4
+    
+    console.log(myPara[4].innerHTML) // Rupesh <b>Kumar</b>
+    console.log(myPara[4].innerText) //Rupesh Kumar
+
+    //Set the tag in it
+    myPara[3].innerHTML = "Ranjeet <i>Upadhyay</i>";
+
+    console.log(myPara.item(1)); // <p id="Demo">Ranjeet Upadhyay</p>
+
+    //Property change krna
+    myPara[0].style.color = 'green'
+
+</script>
+</html>

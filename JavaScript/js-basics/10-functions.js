@@ -85,9 +85,3 @@ function makeFunc() {
 
 const myFunc = makeFunc();
 myFunc();
-
-
-const printName =  function name(name) {
-  console.log("Ranjeet"+ name);
-}
-printname("Upadhyay")
