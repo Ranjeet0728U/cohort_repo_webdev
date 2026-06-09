@@ -37,20 +37,37 @@
 // console.log(`${a} + ${b}`);
 
 
-const allCheck = Promise.all([
-    Promise.resolve("Chai"),
-    Promise.resolve("Code"),
-    Promise.reject("Error"),
-]);
-allCheck.then(console.log)
-.catch(err=>{
-    console.log(err);
-})
+// const allCheck = Promise.all([
+//     Promise.resolve("Chai"),
+//     Promise.resolve("Code"),
+//     Promise.reject("Error"),
+// ]);
+// allCheck.then(console.log)
+// .catch(err=>{
+//     console.log(err);
+// })
 
-const allPromise = Promise.allSettled([
-    Promise.resolve("Chai"),
-    Promise.resolve("Code"),
-    Promise.reject("Error"),
-]);
-allPromise.then(console.log)
-.catch(console.log)
+// const allPromise = Promise.allSettled([
+//     Promise.resolve("Chai"),
+//     Promise.resolve("Code"),
+//     Promise.reject("Error"),
+// ]);
+// allPromise.then(console.log)
+// .catch(console.log);
+
+const hpromise = new Promise((res, rej) =>{
+    setTimeout(() =>{
+        rej(new Error("Master Ji"));
+    }, 3000);
+});
+
+async function nice(){
+    try{
+        const res = await hpromise;
+        console.log(res);
+    }catch(err){
+        console.log("error aa gya", err);
+        console.log("ranjeet")
+    }
+}
+nice();
