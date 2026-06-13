@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TO DO LIST</title>
+    <style>
+        body{
+            background-color: black;
+            color: white;
+            background-color: aqua;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: 1.5s;
+        }
+
+        #toggler{
+            border-radius: 50px;
+            padding: 10px;
+        }
+
+        .dark{
+            background-color: rgb(2, 64, 71);
+            color: aqua;
+            transition: 1.5s ;
+        }
+
+        .input-container{
+            background-color: bisque;
+            border-radius: 30px;
+            padding: 30px;
+        }
+        .input-container input{
+            border-radius: 10px;
+            
+            margin: 10px;
+            padding: 10px;
+        }
+        .input-container button{
+            border-radius: 20px;
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+        .input-container button:hover{
+            background: linear-gradient(150deg, rgb(5, 99, 133), rgb(156, 7, 12));
+            color: bisque;
+        }
+
+        #list-Item{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            opacity:calc(100);;
+            background-color: wheat;
+            border-radius: 20px;
+        }
+
+        #list-Item li{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 350px;
+            padding: 10px;
+        }
+        #list-Item li span{
+            flex: 1;       
+            text-align: left;
+            color: black;
+        }
+        #list-Item li button{
+            margin-left: 10px;
+            border-radius: 20px;
+        }
+        .del{
+            color: azure;
+            background: linear-gradient(135deg, red, black);
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div><button id="toggler">dark Mode</button></div>
+
+    <div class = "input-container">
+        <input type="text" id="input" placeholder="Enter your plan">
+        <button id="btn">add</button>
+    </div>
+    <div>
+        <ul id="list-Item"></ul>
+    </div>
+
+    <script>
+        const body = document.body;
+        const toggle = document.getElementById('toggler');
+        const inputRef = document.getElementById("input");
+        const addBtn = document.getElementById("btn");
+        const listRef = document.getElementById('list-Item');
+
+        toggle.addEventListener('click',()=>{
+            body.classList.toggle("dark");
+            if(body.classList.contains("dark")){
+                toggle.textContent = "Dark Mode";
+            }else{
+                toggle.textContent = "Light Mode"
+            }
+        })
+        
+       
+        addBtn.addEventListener('click',addList);
+        
+        inputRef.addEventListener("keydown",(event) =>{
+            if(event.key === 'Enter'){
+                addList();
+            }
+        })
+        function addList(){
+            if(inputRef.value === ""){
+                alert("Plese enter something");
+                return;
+            }
+
+            let value = inputRef.value;
+            const li = document.createElement("li");
+
+            const span = document.createElement("span");
+            span.textContent = value;
+
+            const delbtn = document.createElement("button");
+            delbtn.innerText = "Delete"
+            delbtn.classList.add("del");
+
+            li.appendChild(span);
+            li.appendChild(delbtn);
+
+
+
+            li.addEventListener('dblclick',()=>{
+                const value1 = span.textContent;
+                const input = document.createElement('input')
+                input.type = "text";
+                input.value = value1;
+
+                li.textContent = ''
+                li.appendChild(input);
+                input.focus();
+                input.addEventListener('keydown',(event) =>{
+                    if (event.key === 'Enter') {
+                        span.textContent = input.value;
+
+                        li.innerHTML = '';
+                        li.appendChild(span);
+                        li.appendChild(delbtn);
+                    }
+                })
+            })
+
+            delbtn.addEventListener('click',() =>{
+                li.remove();
+            })
+
+            listRef.appendChild(li);
+            inputRef.value = "";
+            
+        }
+    </script>
+
+</body>
+</html>

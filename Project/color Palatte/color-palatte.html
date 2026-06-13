@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <div id="select-container">
+        <select name="colorType" id="colorType" required>
+            <option value=""  selected disabled hidden>selcet color format</option>
+            <option value="hex">hex</option>
+            <option value="rgb">RGB</option>
+        </select>
+
+        <select name="Tone" id="Tone">
+            <option value=""selected disabled hidden>Select tone</option>
+            <option value="Light">Light</option>
+            <option value="Dark">Dark</option>
+        </select>
+
+        <button id="generator">Generate</button>
+     </div>
+
+
+
+     <div class="color-container">
+        <div id="color-box"></div>
+        <div id="color-box"></div>
+        <div id="color-box"></div>
+        <div id="color-box"></div>
+     </div>
+     <script src="script.js"></script>
+</body>
+</html>

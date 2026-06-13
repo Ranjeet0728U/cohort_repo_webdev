@@ -1,0 +1,46 @@
+body{
+    background-color: rgb(85, 6, 101);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+#select-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 10px;
+    padding: 30px;
+
+
+    border: 5px solid transparent;
+    border-radius: 15px;
+
+    background: 
+        linear-gradient(rgb(8,8,72),rgb(25,8,172)) padding-box,
+        linear-gradient(
+            100deg,
+            red,
+            orange,
+            yellow,
+            rgb(21, 179, 47),
+            rgb(0, 130, 108),
+            rgb(232, 144, 232),
+            rgb(16, 169, 174)
+        ) border-box;  
+}
+
+#select-container select{
+    border-radius: 10px;
+    padding: 8px;
+}
+
+#select-container button{
+    border-radius: 10px;
+    padding: 8px;
+    cursor: pointer;
+}
