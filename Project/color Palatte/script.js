@@ -1,7 +1,7 @@
 const clrbtn = document.getElementById("colorType");
 const Tnbtn = document.getElementById("Tone");
 const genrtBtn = document.getElementById("generator");
-const box = document.getElementById('color-box');
+const box = document.querySelectorAll('.color-box');
 
 function rgbGenerator(tone) {
     let min = 0;
@@ -17,7 +17,7 @@ function rgbGenerator(tone) {
     const r = Math.floor(Math.random() * (max - min) + min);
     const g = Math.floor(Math.random() * (max - min) + min);
     const b = Math.floor(Math.random() * (max - min) + min);
-    return Array(r,g,b);
+    return [r,g,b];
 }
 
 
@@ -30,17 +30,24 @@ function hexGenerator(clr){
 
 
 genrtBtn.addEventListener('click',() =>{
-    const clr = rgbGenerator(Tnbtn.value);
-    if(clrbtn.value === 'hex'){
-        box.style.backgroundColor  = hexGenerator(clr);
-    }else{
-        box.style.backgroundColor = `rgb(${clr[0]}, ${clr[1]}, ${clr[2]})`;
-    }
+    box.forEach(boxes =>{
+        const clr = rgbGenerator(Tnbtn.value);
+        if(clrbtn.value === 'hex'){
+            const clring= hexGenerator(clr);
+            boxes.style.backgroundColor = clring;
+            boxes.textContent = clring;
+        }else{
+            const rgb = `rgb(${clr[0]}, ${clr[1]}, ${clr[2]})`;
+            boxes.style.backgroundColor = rgb;
+            boxes.textContent = rgb;
+        }
 
-    box.style.display = "flex";
-    box.style.justifyContent = "center";
-    box.style.alignItems = "center";
-    box.in
-})
+        boxes.style.display = "flex";
+        boxes.style.justifyContent = "center";
+        boxes.style.height = '100px'
+        boxes.style.width = '100px'
+        boxes.style.alignItems = "center";
+        });
+});
 
 
