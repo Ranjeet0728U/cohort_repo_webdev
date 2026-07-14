@@ -1,4 +1,5 @@
 import express from 'express';
+import { version } from 'react';
 
 function block_01_basicServer(){
     return new Promise((resolve) =>{
@@ -87,8 +88,45 @@ function block_01_basicServer(){
     })
 }
 
+function block_02_response(){
+    return new Promise((resolve) =>{
+        const app = express();
+
+        app.get('/text',(req,res) =>{
+            res.send("hello from chaiCode");
+        });
+
+        app.get('/json',(req,res) =>{
+            res.json({
+                framework : 'express',
+                version : '2.0.1'
+            })
+        });
+
+        app.get('/not-found',(req,res) =>{
+            res.status(404).json({
+                error : "request not found",
+            })
+        });
+
+        app.get('/health',(req,res) =>{
+            res.sendStatus(201);
+        })
+
+        app.get('/old-menu', (req,res) =>{
+            res.redirect(301,'/new-menu');
+        });
+
+        app.get('/xml',(req,res) =>{
+            
+        })
+    })
+
+}
+
 async function main() {
     await block_01_basicServer();
+    await block_02_response();
     process.exit(0);
 }
 
