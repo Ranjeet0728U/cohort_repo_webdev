@@ -1,5 +1,4 @@
 import express from 'express';
-import { version } from 'react';
 
 function block_01_basicServer(){
     return new Promise((resolve) =>{
@@ -113,21 +112,51 @@ function block_02_response(){
             res.sendStatus(201);
         })
 
+        app.get('/new-menu',(req,res) =>{
+            res.send('<p>Hello mitra</p> <h1> Kya hal chal hai</h1>');
+            res.json({
+                body : "check it",
+                massage : 'redirected here'
+            })
+        })
+
         app.get('/old-menu', (req,res) =>{
             res.redirect(301,'/new-menu');
         });
 
         app.get('/xml',(req,res) =>{
+            res.type('application/xml').send('<food><name>Biryani</name></food>')
+        })
+
+        app.get('/custom-header', (req,res) =>{
+            res.set('X-Powered-By','Ranjeet');
+            res.set('X-Res-Id', '2014');
+
+            res.json({
+                massage : 'header set',
+            });
+        });
+
+        app.get('/no-content',(req,res) =>{
+            res.status(204).end();
+        })
+
+        const port = 3000;
+
+        const server = app.listen(port, async() =>{
+            const port = server.address().port;
+            console.log(`http://localhost:${port}`);
             
         })
     })
+    
 
 }
 
 async function main() {
     await block_01_basicServer();
-    await block_02_response();
-    process.exit(0);
+    block_02_response();
+
 }
 
 main();

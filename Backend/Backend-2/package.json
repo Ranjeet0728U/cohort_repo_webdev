@@ -7,6 +7,7 @@
   "type": "module",
   "main": "01-express-intro.js",
   "scripts": {
+    "dev": "node 01-express-intro.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
