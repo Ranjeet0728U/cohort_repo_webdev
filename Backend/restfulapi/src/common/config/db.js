@@ -14,3 +14,5 @@ async function connectDB (){
 connectDB().catch((err) =>{
     console.error("error is ",err);
 })
+
+export default connectDB;
