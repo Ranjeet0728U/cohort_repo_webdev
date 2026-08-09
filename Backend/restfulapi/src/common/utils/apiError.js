@@ -7,7 +7,7 @@ class ApiError extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 
-    static badRequest(massage = "bad request"){
+    static (massage = "bad request"){
         throw new ApiError(400, massage);
     }
 
