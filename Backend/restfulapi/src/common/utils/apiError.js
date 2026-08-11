@@ -14,4 +14,7 @@ class ApiError extends Error {
     static unauthorized(massage = 'unauthorized'){
         throw new ApiError(401, massage);
     }
+    static existingUser(massage = 'Conflict'){
+        throw new ApiError(409, massage);
+    }
 }

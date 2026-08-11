@@ -1,7 +1,7 @@
-const register = async(req) =>{
-    // Register user
-    let userObject;
-    return userObject;
-}
+import * as service from './auth.service.js';
+import ApiRes from '../../common/utils/api-respons.js'
 
-export {register};
+const register = async (req, res) => {
+    const user = service.register(req.body);
+    ApiRes.created(res, "Registration SuccessFull", user);
+}

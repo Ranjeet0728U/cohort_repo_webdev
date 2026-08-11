@@ -3,4 +3,4 @@ import * as controller from './auth.controller.js'
 
 const router = router();
 
-router.post('/Register',validate(RegisterDto), controller.register(req.body))
+router.post('/Register',validate(RegisterDto), controller.register)
