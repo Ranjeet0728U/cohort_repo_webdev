@@ -1,6 +1,6 @@
 import { required } from "joi";
 import mongoose from "mongoose";
-import role from './user.role.js'
+import role from '../user.role.js'
 
 const userSchema = new mongoose.Schema({
     name : {
