@@ -9,7 +9,7 @@ const register = async({name, email, password, role}) =>{
     }
     const {rawToken, HashedToken} = generateRestToken();
     
-    const User = user.create({
+    const User = await user.create({
         name,
         password,
         email,
