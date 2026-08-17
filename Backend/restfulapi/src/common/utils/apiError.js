@@ -21,3 +21,4 @@ class ApiError extends Error {
         throw new ApiError(412, massage);
     }
 }
+export default ApiError

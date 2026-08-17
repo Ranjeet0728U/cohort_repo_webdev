@@ -35,7 +35,7 @@ const login = async(email, password) => {
     //somehow check the password
 
     if(!user.isVarified){
-        throw new ApiError.forbidden("Please verify your email to proceed further");
+        throw new ApiError.forbidden("Please verify your email to proceed further")
     }
 
     const accessToken = Token.generateAccessToken({id : _id, role :role});
