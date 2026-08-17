@@ -17,4 +17,7 @@ class ApiError extends Error {
     static existingUser(massage = 'Conflict'){
         throw new ApiError(409, massage);
     }
+    static forbidden(massage = 'forbidden'){
+        throw new ApiError(412, massage);
+    }
 }
