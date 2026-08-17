@@ -26,7 +26,7 @@ const register = async({name, email, password, role}) =>{
 
 }
 
-const login = (email, password) => {
+const login = async(email, password) => {
     const user = await users.findOne(email).select("+password")
     if(!user){
         throw new ApiError.unauthorized("Not a authorized person")
