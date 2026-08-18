@@ -44,12 +44,50 @@ const login = async(email, password) => {
     user.refreshToken = hashedToken(refreshToken)
     await user.save({validateBeforeSave : false});
 
-    const userObj = user.toObject;
+    const userObj = user.toObject();
 
-    userObj.delete(refreshToken);
-    userObj.delete(password);
+    delete userObj.refreshToken
+    delete userObj.password;
 
     return {user : userObj, accessToken, refreshToken};
+}
+
+const refresh = async(token) => {
+    if(!token){
+        throw ApiError.unauthorized("Refresh token missing");
+    }
+    
+    const decode = Token.verifyREFRESHToken(token);
+
+    const user = await users.findById(decode._id).select("+refreshToken");
+
+    if(user.refreshToken !== hashedToken(token)){
+        throw ApiError.unauthorized("Invalid Token");
+    }
+
+    const accessToken = Token.generateAccessToken({id :user._id, role :user.role});
+    const refreshToken = Token.generateRefreshToken({id: user._id});
+
+    user.refreshToken = hashedToken(refreshToken)
+    await user.save({validateBeforeSave : false});
+    return refreshToken;
+}
+
+const logOut = async (userId) => {
+    await user.findByIdAndUpdate(userId, {refreshToken : null});
+}
+
+const forgetPassword = async (email) => {
+    const user = await users.findOne({email});
+    if(!user) throw ApiError.noUser
+
+    const {rawToken, hashedToken} = Token.generateResetToken();
+    //rawToken user ko bhej do;
+
+    user.resetPassowordToken = hashedToken
+    user.resetPasswordTokenExpire = Date.now() + 15 * 60 * 1000;
+
+    await user.save({validateBeforeSave : false});
 }
 
 export {register, login};

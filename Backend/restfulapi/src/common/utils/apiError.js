@@ -20,5 +20,9 @@ class ApiError extends Error {
     static forbidden(massage = 'forbidden'){
         throw new ApiError(412, massage);
     }
+
+    static noUser(massage = "No user found"){
+        throw new ApiError(404, massage)
+    }
 }
 export default ApiError

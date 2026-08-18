@@ -25,7 +25,7 @@ const verifyREFRESHToken = (data) => {
     return jwt.verify(data, process.env.JWT_REFRESH_SECRET);
 }
 
-const generateRestToken = async () =>{
+const generateResetToken = async () =>{
     const rawToken = crypto.randomBytes(32).toString("hex");
 
     const HashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
@@ -38,7 +38,7 @@ const generateRestToken = async () =>{
 export {
     generateAccessToken,
     generateRefreshToken,
-    generateRestToken,
+    generateResetToken,
     verifyAccessToken,
     verifyREFRESHToken
 }
