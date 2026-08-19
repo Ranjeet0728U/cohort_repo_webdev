@@ -1,17 +1,19 @@
 import * as Token from '../../common/utils/jwt.token'
 import users from './auth.model'
 import ApiError from '../../common/utils/apiError'
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 
 const hashedToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
 
 const register = async({name, email, password, role}) =>{
-    const existing = await users.find(email)
+    const existing = await users.findOne({email})
     if(existing){
         throw new ApiError("Email already registered")
     }
-    const {rawToken, HashedToken} = generateRestToken();
+    const {rawToken, HashedToken} = Token.generateResetToken();
     
-    const User = await usesr.create({
+    const User = await users.create({
         name,
         password,
         email,
@@ -38,7 +40,10 @@ const login = async(email, password) => {
         throw new ApiError.forbidden("Please verify your email to proceed further")
     }
 
-    const accessToken = Token.generateAccessToken({id : _id, role :role});
+    const accessToken = Token.generateAccessToken({
+        id : user._id, 
+        role :user.role
+    });
     const refreshToken = Token.generateRefreshToken({id: _id});
 
     user.refreshToken = hashedToken(refreshToken)
@@ -70,11 +75,11 @@ const refresh = async(token) => {
 
     user.refreshToken = hashedToken(refreshToken)
     await user.save({validateBeforeSave : false});
-    return refreshToken;
+    return {accessToken,refreshToken};
 }
 
 const logOut = async (userId) => {
-    await user.findByIdAndUpdate(userId, {refreshToken : null});
+    await users.findByIdAndUpdate(userId, {refreshToken : null});
 }
 
 const forgetPassword = async (email) => {
@@ -84,10 +89,20 @@ const forgetPassword = async (email) => {
     const {rawToken, hashedToken} = Token.generateResetToken();
     //rawToken user ko bhej do;
 
-    user.resetPassowordToken = hashedToken
+    user.resetPasswordToken = hashedToken
     user.resetPasswordTokenExpire = Date.now() + 15 * 60 * 1000;
 
     await user.save({validateBeforeSave : false});
+}
+
+const reSetPassword = async (rawToken) => {
+    const hashed = hashedToken(rawToken);
+    const user = await users.findOne({resetPassowordToken : hashed}).select("+Password");
+
+    const password = "safsadofoasdfnsdofn";
+    user.password = hashedToken(password);
+    await user.save({validateBeforeSave : false})
+    
 }
 
 export {register, login};
