@@ -1,6 +1,6 @@
-import { required } from "joi";
+// import Joi from "joi";
 import mongoose from "mongoose";
-import role from '../user.role.js'
+import role from '../../user.role.js'
 
 const userSchema = new mongoose.Schema({
     name : {
@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
         default : "Customer"
     },
 
-    isVarified : {
+    isVerified : {
         type : Boolean,
         default : false,
     },

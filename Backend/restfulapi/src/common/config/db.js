@@ -1,18 +1,17 @@
 import dotenv from 'dotenv'
-import mongoose from 'mongoose';
+import mongoose  from 'mongoose'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-dotenv.config({path : '../../../.env'});
+const envPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../.env');
+dotenv.config({ path: envPath });
 
-async function connectDB (){
+async function connectDB() {
+    console.log("Connectng to db")
 
-    console.log(process.env.MONGODB_URI)
-    const dbconnection = await mongoose.connect(process.env.MONGODB_URI);
-
-    console.log(dbconnection.connection.host);
+    const dbConnection = await mongoose.connect(process.env.MONGODB_URI);
+    console.log(process.env.MONGODB_URI);
+    console.log(dbConnection.connection.name);
 }
 
-connectDB().catch((err) =>{
-    console.error("error is ",err);
-})
-
-export default connectDB;
+export default connectDB;       

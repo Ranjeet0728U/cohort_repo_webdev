@@ -1,108 +1,123 @@
-import * as Token from '../../common/utils/jwt.token'
-import users from './auth.model'
-import ApiError from '../../common/utils/apiError'
-import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
+import crypto from 'crypto'
+import ApiError from '../../common/utils/api-Error.js'
+import * as token from '../../common/utils/jwt.token.js'
+import users from './auth.model.js'
+import * as Email from '../../common/config/email.js'
 
-const hashedToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
+const hashedToken = (token) =>crypto.createHash('sha256').update(token).digest('hex')
 
-const register = async({name, email, password, role}) =>{
+const register = async({name, email, password, role}) => {
     const existing = await users.findOne({email})
+
     if(existing){
-        throw new ApiError("Email already registered")
+        throw ApiError.existedData("Email already exist")
     }
-    const {rawToken, HashedToken} = Token.generateResetToken();
-    
+
+    const {rawToken, HashedToken} = token.generateResetToken()
+
     const User = await users.create({
         name,
         password,
         email,
         role,
-        verificationToken :HashedToken
+        verificationToken : HashedToken
     });
-    
-    const userObj = User.toObject();
+
+    const userObj = User.toObject()
+
     delete userObj.password
     delete userObj.verificationToken
-    return userObj;
-
+    return userObj
 }
 
 const login = async(email, password) => {
-    const user = await users.findOne(email).select("+password")
+    const user = await users.findOne({email}).select("+password");
     if(!user){
-        throw new ApiError.unauthorized("Not a authorized person")
+        throw ApiError.forbiddern("Please verify your email to proceed further")
     }
 
-    //somehow check the password
+    const accessToken = token.generateRefreshToken({id: user._id})
 
-    if(!user.isVarified){
-        throw new ApiError.forbidden("Please verify your email to proceed further")
-    }
-
-    const accessToken = Token.generateAccessToken({
-        id : user._id, 
-        role :user.role
-    });
-    const refreshToken = Token.generateRefreshToken({id: _id});
+    const refreshToken = token.generateAccessToken({id : user._id})
 
     user.refreshToken = hashedToken(refreshToken)
-    await user.save({validateBeforeSave : false});
 
-    const userObj = user.toObject();
+    await user.save({validateBeforeSave :false});
+
+    const userObj = user.toObject()
 
     delete userObj.refreshToken
-    delete userObj.password;
 
-    return {user : userObj, accessToken, refreshToken};
+    delete userObj.password
+    return {user : userObj, accessToken , refreshToken};
 }
 
-const refresh = async(token) => {
-    if(!token){
-        throw ApiError.unauthorized("Refresh token missing");
+const refresh = async(refreshToken) =>{
+    if(!refreshToken){
+        throw ApiError.unauthorized("Refresh Token is missing")
     }
-    
-    const decode = Token.verifyREFRESHToken(token);
 
-    const user = await users.findById(decode._id).select("+refreshToken");
+    const decode = token.verifyREFRESHToken(refreshToken);
 
-    if(user.refreshToken !== hashedToken(token)){
+    const user = await users.findById(decode.id).select("+refreshToken")
+
+    if(user.refreshToken !== hashedToken(refreshToken)){
         throw ApiError.unauthorized("Invalid Token");
     }
 
-    const accessToken = Token.generateAccessToken({id :user._id, role :user.role});
-    const refreshToken = Token.generateRefreshToken({id: user._id});
+    const accessToken = token.generateAccessToken({id : user._id, role : user.role});
+    const refreshToken = token.generateRefreshToken({id : user._id})
 
     user.refreshToken = hashedToken(refreshToken)
     await user.save({validateBeforeSave : false});
-    return {accessToken,refreshToken};
+
+    return {accessToken, refreshToken};
 }
 
-const logOut = async (userId) => {
-    await users.findByIdAndUpdate(userId, {refreshToken : null});
+const logOut = async(userId) => {
+    await users.findByIdAndUpdate(userId, {refreshToken : null})
 }
 
 const forgetPassword = async (email) => {
     const user = await users.findOne({email});
-    if(!user) throw ApiError.noUser
 
-    const {rawToken, hashedToken} = Token.generateResetToken();
-    //rawToken user ko bhej do;
+    if(!user) throw ApiError.noUser("No user found");
 
-    user.resetPasswordToken = hashedToken
-    user.resetPasswordTokenExpire = Date.now() + 15 * 60 * 1000;
+    const {rawToken, hashedToken} = token.generateResetToken();
+
+    await Email.sendVerificationEmail(email,rawToken)
+
+    user.ResetPasswordTOken = hashedToken
+
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000
+
+    await user.save({validateBeforeSave :false});
+}
+
+const reSetPassword = async (rawToken) => {
+    const hashed = hashedToken(rawToken)
+
+    const user = await users.findOne({ResetPasswordTOken : hashed}).select("+Password")
+
+    const password = "asjf;jsfas;fjj;sajkf;sfslfjhsdfsdhfs";
+    user.password = hashedToken(password)
 
     await user.save({validateBeforeSave : false});
 }
 
-const reSetPassword = async (rawToken) => {
-    const hashed = hashedToken(rawToken);
-    const user = await users.findOne({resetPassowordToken : hashed}).select("+Password");
-
-    const password = "safsadofoasdfnsdofn";
-    user.password = hashedToken(password);
-    await user.save({validateBeforeSave : false})
-    
+const getMe = async (userId) => {
+    const user = await users.findById(userId);
+    if(!user) throw ApiError.notFound("User not found")
+    return user;
 }
 
-export {register, login};
+export {
+    hashedToken,
+    register,
+    login,
+    refresh,
+    logOut,
+    forgetPassword,
+    reSetPassword,
+    getMe
+}

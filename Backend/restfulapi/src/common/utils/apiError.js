@@ -7,7 +7,7 @@ class ApiError extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 
-    static (massage = "bad request"){
+    static badRequest(massage = "bad request"){
         throw new ApiError(400, massage);
     }
 
@@ -23,6 +23,9 @@ class ApiError extends Error {
 
     static noUser(massage = "No user found"){
         throw new ApiError(404, massage)
+    }
+    static DBNotConnected(massage = "No DB Connected"){
+        throw new ApiError(503, massage)
     }
 }
 export default ApiError

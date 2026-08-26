@@ -16,6 +16,7 @@ class BaseDto{
         }
 
         return {error = null, value};
+        
     }
 }
 

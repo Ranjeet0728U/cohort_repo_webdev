@@ -1,6 +1,5 @@
 class ApiResponse{
 
-    
     static ok(res, massage, data = null){
         return res.status(200).json({
             success : true,
