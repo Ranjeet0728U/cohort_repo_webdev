@@ -2,22 +2,19 @@
   "name": "authentication-chaicode",
   "version": "1.0.0",
   "description": "",
+  "homepage": "https://github.com/Ranjeet0728U/cohort_repo_webdev/tree/main#readme",
+  "bugs": {
+    "url": "https://github.com/Ranjeet0728U/cohort_repo_webdev/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ranjeet0728U/cohort_repo_webdev.git#main"
+  },
+  "license": "ISC",
+  "author": "Ranjeet Upadhyay",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "build": "tsc -p .",
-    "dev": "tsc --watch"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.34.5",
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^26.4.0",
-    "typescript": "^7.0.2"
-  },
-  "dependencies": {
-    "express": "^5.2.1"
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
