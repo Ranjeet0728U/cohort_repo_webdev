@@ -11,5 +11,7 @@ export function createApplication() : Express {
     app.get('/',(req,res) => {
         res.send("ranjeet")
     })
+
+    app.use('/auth', authRouter);
     return app;
 }
