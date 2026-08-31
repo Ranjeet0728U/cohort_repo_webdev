@@ -1,8 +1,9 @@
 CREATE TABLE "user" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-	"fist_name" varchar(45) NOT NULL,
+	"first_name" varchar(45) NOT NULL,
 	"last_name" varchar(45),
 	"email" varchar(322) NOT NULL,
+	"password" text NOT NULL,
 	"email_verified" boolean DEFAULT false NOT NULL UNIQUE,
 	"salt" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,

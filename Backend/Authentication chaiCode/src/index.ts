@@ -1,4 +1,15 @@
-import 'dotenv/config';
-import { drizzle } from 'drizzle-orm/node-postgres';
+import express from 'express'
 
-const db = drizzle(process.env.DATABASE_URL!);
+import type{Express} from 'express'
+import { authRouter } from './app/auth/routers.js'
+
+export function createApplication() : Express {
+    const app = express()
+
+    app.use(express.json())
+
+    app.get('/',(req,res) => {
+        res.send('<b> hi this is Ranjeet</b>')
+    })
+    return app;
+}

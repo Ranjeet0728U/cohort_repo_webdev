@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "3d2feda2-e7ec-4733-a785-f88397009c9a",
+  "id": "a25d5ea8-32cc-430a-8082-2c24672b72fc",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -33,7 +33,7 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "fist_name",
+      "name": "first_name",
       "entityType": "columns",
       "schema": "public",
       "table": "user"
@@ -60,6 +60,19 @@
       "generated": null,
       "identity": null,
       "name": "email",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "password",
       "entityType": "columns",
       "schema": "public",
       "table": "user"
