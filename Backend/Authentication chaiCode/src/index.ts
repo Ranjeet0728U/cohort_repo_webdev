@@ -1,15 +1,16 @@
-import express from 'express'
+import { createServer } from 'node:http'
+import { createApplication } from './app/index.js'
 
-import type{Express} from 'express'
-import { authRouter } from './app/auth/routers.js'
+async function main() {
+    try{
+        const server = createServer(createApplication())
+        const PORT = 8080
 
-export function createApplication() : Express {
-    const app = express()
-
-    app.use(express.json())
-
-    app.get('/',(req,res) => {
-        res.send('<b> hi this is Ranjeet</b>')
-    })
-    return app;
+        server.listen(PORT, () => {
+            console.log(`running at http://localhost:${PORT}`)
+        })
+    }catch(err){
+        console.log("error");
+    }
 }
+main()
