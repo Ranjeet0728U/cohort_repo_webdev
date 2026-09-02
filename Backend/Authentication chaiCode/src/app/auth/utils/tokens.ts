@@ -6,7 +6,7 @@ export interface userpayload {
 
 const JWT_SECRETE = 'myjwtsecret' // isko .env file se lena 
 
-export function createUserToken (payload : userpayload) {
+export function createUserToken (payload : userpayload) {s
     const token = JWT.sign(payload, JWT_SECRETE)
     return token
 }
