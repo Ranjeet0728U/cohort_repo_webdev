@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "2bc8d5c7-8399-4807-8cef-a4845ec883fa",
+  "id": "69d2a8f1-827c-4b39-83ee-26ace54d6f37",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -142,10 +142,10 @@
     {
       "nameExplicit": false,
       "columns": [
-        "email_verified"
+        "email"
       ],
       "nullsNotDistinct": false,
-      "name": "user_email_verified_key",
+      "name": "user_email_key",
       "schema": "public",
       "table": "user",
       "entityType": "uniques"

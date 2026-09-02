@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import { z } from 'zod'
 
 export const signupPayloadModel = z.object({
     firstName : z.string().min(2).max(50),

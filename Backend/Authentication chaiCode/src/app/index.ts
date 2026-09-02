@@ -11,7 +11,7 @@ export function createApplication() : Express {
     app.use(authenticationMiddleware())
 
     app.get('/',(req,res) => {
-        res.send("ranjeet").json({message: `welcome to chaiCode`})
+        res.send("ranjeet")
     })
 
     app.use('/auth', authRouter);
