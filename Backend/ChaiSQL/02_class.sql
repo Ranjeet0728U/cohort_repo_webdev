@@ -94,3 +94,13 @@ LIMIT 3 OFFSET 5;
 SELECT name, nickname, auction_price_crores, (auction_price_crores + 2) AS new_Price
 FROM ipl_players;
 
+SELECT name, nickname, auction_price_crores, (auction_price_crores * 100) AS price_in_lakh
+FROM ipl_players;
+
+
+--! HOW TO GET DISTINCT VALUE
+
+SELECT distinct role FROM ipl_players; --Bowler, Batsman, All-rounder, WicketKeeper
+
+
+
