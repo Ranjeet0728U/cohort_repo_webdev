@@ -22,7 +22,7 @@ INSERT INTO ipl_players(name, team, role, runs_scored, wicketS_taken, auction_pr
 ('Rinku Singh', 'KKR', 'Batsman', 475, 0, 0.55, 'The Spirit'),
 ('Arjun Tendulkar', 'Mumbai Indians', 'Bowler', 10, 3, 0.30, 'Arjun'),
 ('Kane Williamson', 'LSG', 'Batsman', 600, 0, 11.00, 'Kane Mama'),
-('Mystery Player', NULL, 'Batsman', 0, 0, 1.00, 'Mystery Man');
+('Mystery Player', NULL, 'Batsman', 0, 0, 1.00, 'Mystery Man'); 
 
 
 SELECT * FROM ipl_players;
