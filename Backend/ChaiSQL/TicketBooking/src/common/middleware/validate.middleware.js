@@ -1,0 +1,16 @@
+import ApiError from "../utils/apiError";
+
+const validate = (Dtoclass) => {
+    return (req, res, next) => {
+        const {error, value} = Dtoclass.validate(req.body);
+
+        if(error){
+            throw ApiError.forbidden(error.join('; '))
+        }
+
+        req.body = value;
+        next();
+    }
+}
+
+export default validate
