@@ -11,7 +11,6 @@ import {
     verifyRefressToken,
     generateResetToken
 }from '../../common/utils/jwt.token.js'
-import { password } from 'pg/lib/defaults';
 
 const hashToken = (token) =>  crypto.createHash('sha256').update(token).digest('hex')
 const hashPassword = async(password) => await bcrypt.hash(password, 12);
