@@ -1,25 +1,18 @@
-import { Pool } from "pg";
+import 'dotenv/config'
+
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { Pool } from 'pg';
 
 const pool = new Pool({
-    host: "localhost",
-    port: 5433,
-    user: "postgres",
-    password: "postgres",
-    database: "ticketbooking",
-});
+    connectionString : process.env.DATABASE_URL
+})
+
+const db = drizzle(pool)
+
+export default db;
 
 
-const connectDB = async() => {
-
-    pool.query('SELECT NOW()')
-        .then((result) => {
-            console.log('Postgress connected');
-        })
-        .catch((error) => {
-            console.log('Error ')
-            console.error('Error : ',error)
-    })
-}
-
-export default connectDB;
-
+export const connectDB = async () => {
+    await pool.query("SELECT NOW()");
+    console.log("Postgres connected");
+};

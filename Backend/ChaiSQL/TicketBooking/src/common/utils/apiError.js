@@ -24,6 +24,11 @@ class ApiError extends Error {
     static noUser(massage = "No user found"){
         throw new ApiError(404, massage)
     }
+
+    static conflict(massage = "user already existing"){
+        throw new ApiError(409, massage)
+    }
+    
     static DBNotConnected(massage = "No DB Connected"){
         throw new ApiError(503, massage)
     }

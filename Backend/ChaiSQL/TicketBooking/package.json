@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/index.js",
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "studio": "drizzle-kit studio"
   },
   "keywords": [],
   "author": "Ranjeet Upadhyay",
@@ -13,9 +18,15 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
+    "drizzle-orm": "^1.0.0-rc.4",
     "express": "^5.2.1",
     "joi": "^18.2.9",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.0"
+  },
+  "allowScripts": {
+    "bcrypt@6.0.0": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true
   }
 }

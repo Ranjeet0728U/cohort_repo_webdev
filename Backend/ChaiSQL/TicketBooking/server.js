@@ -1,8 +1,8 @@
-import connectDB from './src/common/config/db.js'
 import app from './src/app.js'
 import 'dotenv/config'
+import { connectDB } from './src/common/config/db.js'
 
-const PORT = process.env.PORT | 8000
+const PORT = process.env.PORT || 8000
 
 const start = async() => {
     await connectDB()
@@ -15,5 +15,5 @@ const start = async() => {
 
 start()
     .catch((error) => {
-        console.error('App does not start');
+        console.error(error);
     })
