@@ -1,16 +1,18 @@
-import ApiError from "../utils/apiError";
+import ApiError from "../utils/apiError.js";
 
-const validate = (Dtoclass) => {
+const validate = (DtoClass) => {
     return (req, res, next) => {
-        const {error, value} = Dtoclass.validate(req.body);
+        const { error, value } = DtoClass.schema.validate(req.body);
 
-        if(error){
-            throw ApiError.forbidden(error.join('; '))
+        if (error) {
+            throw ApiError.badRequest(
+                error.details.map((detail) => detail.message).join("; ")
+            );
         }
 
         req.body = value;
         next();
-    }
-}
+    };
+};
 
-export default validate
+export default validate;

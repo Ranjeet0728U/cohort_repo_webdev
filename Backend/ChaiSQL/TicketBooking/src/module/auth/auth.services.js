@@ -1,8 +1,9 @@
 import crypto from 'crypto';
-import db from '../../common/config/db.js'
-import userTable from './auth.model.js';
+import db from '../../db/index.js'
+import userTable from '../../db/schema.js';
 import ApiError from '../../common/utils/apiError.js';
 import bcrypt from "bcryptjs";
+import { eq } from "drizzle-orm";
 
 import {
     generateAccessToken,
@@ -15,7 +16,7 @@ import {
 const hashToken = (token) =>  crypto.createHash('sha256').update(token).digest('hex')
 const hashPassword = async(password) => await bcrypt.hash(password, 12);
 
-const register = async ({ name, email, password, role}) => {
+const register = async ({ name, email, password}) => {
     const existing = await db.select().from(userTable).where(eq(userTable.email, email));
 
     if(existing.length > 0) throw ApiError.conflict("Email already exist")
@@ -51,6 +52,5 @@ const register = async ({ name, email, password, role}) => {
 
 
 export{
-    register,
-    
+    register
 }

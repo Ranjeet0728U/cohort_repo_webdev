@@ -1,6 +1,6 @@
 import app from './src/app.js'
 import 'dotenv/config'
-import { connectDB } from './src/common/config/db.js'
+import { connectDB } from './src/db/index.js'
 
 const PORT = process.env.PORT || 8000
 

@@ -1,36 +1,40 @@
 class ApiError extends Error {
-    constructor(statusCode, massage){
-        super(massage);
-        this.statusCode = statusCode;
+    constructor(statusCode, message) {
+        super(message);
 
+        this.statusCode = statusCode;
         this.isOperational = true;
+
         Error.captureStackTrace(this, this.constructor);
     }
 
-    static badRequest(massage = "bad request"){
-        throw new ApiError(400, massage);
+    static badRequest(message = "Bad request") {
+        throw new ApiError(400, message);
     }
 
-    static unauthorized(massage = 'unauthorized'){
-        throw new ApiError(401, massage);
-    }
-    static existingUser(massage = 'Conflict'){
-        throw new ApiError(409, massage);
-    }
-    static forbidden(massage = 'forbidden'){
-        throw new ApiError(412, massage);
+    static unauthorized(message = "Unauthorized") {
+        throw new ApiError(401, message);
     }
 
-    static noUser(massage = "No user found"){
-        throw new ApiError(404, massage)
+    static existingUser(message = "User already exists") {
+        throw new ApiError(409, message);
     }
 
-    static conflict(massage = "user already existing"){
-        throw new ApiError(409, massage)
+    static forbidden(message = "Forbidden") {
+        throw new ApiError(403, message);
     }
-    
-    static DBNotConnected(massage = "No DB Connected"){
-        throw new ApiError(503, massage)
+
+    static noUser(message = "No user found") {
+        throw new ApiError(404, message);
+    }
+
+    static conflict(message = "User already exists") {
+        throw new ApiError(409, message);
+    }
+
+    static DBNotConnected(message = "Database not connected") {
+        throw new ApiError(503, message);
     }
 }
-export default ApiError
+
+export default ApiError;
