@@ -13,8 +13,8 @@ INSERT INTO Student(id, name, GPA, sizeHS, DoB) VALUES
 (234, 'Bob',    3.6, 1500, '1995-04-07'),
 (345, 'Craig',  3.5,  500, '1995-02-04'),
 (456, 'Drois',  3.9, 1000, '1997-07-24'),
-(567, 'Edward', 3.8, 2000, '1996-06-26'),
-(678, 'Fay',    3.9,  200, '1996-08-27'),
+(567, 'Edward', 2.9, 2000, '1996-12-21'),
+(678, 'Fay',    3.8,  200, '1996-08-27'),
 (789, 'Gary',   3.4,  800, '1996-10-08'),
 (987, 'Hein',   3.7,  800, '1997-03-27'),
 (876, 'Irene',  3.9,  400, '1996-03-07'),
@@ -55,4 +55,7 @@ CREATE TABLE college(
 
 INSERT INTO college(name, state, enrollment)VALUES
 ('STANFORD', 'CA',  15000),
-('Berkeley')
+('Berkeley', 'CA', 36000),
+('MIT', 'MA', 10000),
+('Cornell', 'NY', 21000),
+('Harvard', 'MA', 50040);
