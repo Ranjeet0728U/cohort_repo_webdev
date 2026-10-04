@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Ticket Booking</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="logo">
+                🎟️
+            </div>
+
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Login to book your ticket</p>
+
+            <form id="loginForm">
+
+                <div class="input-group">
+                    <label for="email">Email</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    Login
+                </button>
+
+            </form>
+
+            <p id="loginMessage" class="message"></p>
+
+            <div class="switch-auth">
+                Don't have an account?
+                <a href="./register">Create Account</a>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+        const loginForm = document.getElementById("loginForm");
+
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try {
+
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                });
+
+                const data = await response.json();
+
+                document.getElementById("loginMessage").textContent =
+                    data.message;
+
+                if (response.ok) {
+
+                    setTimeout(() => {
+                        window.location.href = data.redirect || "/ticket/book";
+                    }, 500);
+
+                }
+
+            } catch (error) {
+
+                document.getElementById("loginMessage").textContent =
+                    "Login failed";
+
+            }
+        });
+    </script>
+
+</body>
+</html>

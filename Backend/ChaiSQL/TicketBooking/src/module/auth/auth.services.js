@@ -1,9 +1,9 @@
-import db from '../../db/index.js'
-import {userTable} from '../../db/schema.js';
-import ApiError from '../../common/utils/apiError.js';
-import bcrypt from "bcryptjs";
+import db from '../../db/index.js';
+import { userTable } from '../../db/schema.js';
+import ApiError from '../../common/utils/apiError.js'
+import bcrypt from "bcryptjs"
 import crypto from 'crypto'
-import { eq } from "drizzle-orm";
+import { eq } from "drizzle-orm"
 
 import {
     generateAccessToken,
@@ -11,7 +11,7 @@ import {
     verifyAccessToken,
     verifyRefressToken,
     generateResetToken
-}from '../../common/utils/jwt.token.js'
+} from '../../common/utils/jwt.token.js'
 
 const hashToken = (token) => crypto.createHash("sha256").update(token).digest("hex");
 

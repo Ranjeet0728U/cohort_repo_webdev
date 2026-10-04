@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Ticket Booking</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="logo">
+                🎟️
+            </div>
+
+            <h1>Create Account</h1>
+            <p class="subtitle">Create your ticket booking account</p>
+
+            <form id="registerForm">
+
+                <div class="input-group">
+                    <label for="name">Full Name</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter your name"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Create a password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    Create Account
+                </button>
+
+            </form>
+
+            <p id="registerMessage" class="message"></p>
+
+            <div class="switch-auth">
+                Already have an account?
+                <a href="./login">Login</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const registerForm = document.getElementById("registerForm");
+
+        registerForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try {
+
+                const response = await fetch("/api/auth/register", {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password
+                    })
+                });
+
+                const data = await response.json();
+
+                document.getElementById("registerMessage").textContent =
+                    data.message;
+
+                if (response.ok) {
+                    setTimeout(() => {
+                        window.location.href = "./login.html";
+                    }, 1000);
+                }
+
+            } catch (error) {
+
+                document.getElementById("registerMessage").textContent =
+                    "Something went wrong";
+
+            }
+        });
+    </script>
+
+</body>
+</html>

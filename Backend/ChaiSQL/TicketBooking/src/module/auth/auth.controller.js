@@ -1,14 +1,21 @@
 import * as authService from './auth.services.js'
-import ApiResponse from '../../common/utils/api-respons.js'
+
 
 
 const register = async(req, res) => {
     try{
 
-        const user = await authService.register(req.body);
-        ApiResponse.created(res, "Registration success", user)
+        await authService.register(req.body);
+        return res.status(201).json({
+            success : true,
+            message : 'registered',
+            redirect : '/api/auth/login'
+        })
     }catch(err){
-        console.log(err.message);
+        return res.status(err.statusCode || 500).json({
+            success: false,
+            message: err.message
+        });
     }
 }
 
@@ -28,7 +35,11 @@ const login = async(req, res) => {
             maxAge : 7* 24 * 60 * 60 * 1000 // 7days
         })
         
-        ApiResponse.ok(res, 'Login Success', userObj)
+        return res.status(200).json({
+            success : true,
+            message : 'Login success full',
+            redirect : '/ticket/book'
+        })
     }catch(err) {
         console.log("error Login failed")
         return res.status(404).json({

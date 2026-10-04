@@ -12,7 +12,7 @@ class BaseDto {
 
 
         if(error) {
-            const errors = error.map((d) => d.massage)
+            const errors = error.details.map((d) => d.message);
             return {errors, value : null};
         }else{
             return {error : null, value}

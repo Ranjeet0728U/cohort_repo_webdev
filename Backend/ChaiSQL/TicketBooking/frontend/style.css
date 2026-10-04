@@ -1,0 +1,210 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f4f6f8;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Main Container */
+
+.auth-container {
+    width: 100%;
+    padding: 20px;
+}
+
+
+/* Card */
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+
+    margin: auto;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Logo */
+
+.logo {
+    width: 55px;
+    height: 55px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #222;
+
+    font-size: 25px;
+}
+
+
+/* Heading */
+
+.auth-card h1 {
+    text-align: center;
+
+    font-size: 28px;
+
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    text-align: center;
+
+    color: #777;
+
+    font-size: 14px;
+
+    margin-bottom: 30px;
+}
+
+
+/* Input */
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+.input-group input {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid #d5d5d5;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #222;
+
+    box-shadow:
+        0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Button */
+
+.auth-btn {
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #222;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.auth-btn:hover {
+    background: #444;
+}
+
+
+/* Message */
+
+.message {
+    text-align: center;
+
+    margin-top: 15px;
+
+    font-size: 14px;
+
+    color: #555;
+}
+
+
+/* Login/Register Switch */
+
+.switch-auth {
+    text-align: center;
+
+    margin-top: 25px;
+
+    font-size: 14px;
+
+    color: #666;
+}
+
+.switch-auth a {
+    color: #222;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.switch-auth a:hover {
+    text-decoration: underline;
+}
+
+
+/* Mobile */
+
+@media (max-width: 480px) {
+
+    .auth-card {
+        padding: 30px 22px;
+    }
+
+    .auth-card h1 {
+        font-size: 24px;
+    }
+}

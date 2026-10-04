@@ -1,5 +1,5 @@
 {
-  "id": "9aa6c04e-047a-4f11-897b-d7bad4c51f87",
+  "id": "c70f963f-8ead-4062-b7ed-ddf645864066",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -14,24 +14,59 @@
           "primaryKey": true,
           "notNull": true
         },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "name": {
           "name": "name",
           "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "seat_number": {
+          "name": "seat_number",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "is_booked": {
           "name": "is_booked",
-          "type": "integer",
+          "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
-          "default": 0
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "seats_customer_id_users_id_fk": {
+          "name": "seats_customer_id_users_id_fk",
+          "tableFrom": "seats",
+          "tableTo": "users",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "seats_seat_number_unique": {
+          "name": "seats_seat_number_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "seat_number"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -61,7 +96,7 @@
         },
         "password": {
           "name": "password",
-          "type": "varchar",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
@@ -72,11 +107,13 @@
           "notNull": true,
           "default": false
         },
-        "salt": {
-          "name": "salt",
-          "type": "text",
+        "role": {
+          "name": "role",
+          "type": "role",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "'customer'"
         },
         "verification_token": {
           "name": "verification_token",
@@ -101,7 +138,7 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         }
       },
@@ -109,13 +146,6 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "users_id_unique": {
-          "name": "users_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
-        },
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
@@ -129,7 +159,17 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.role": {
+      "name": "role",
+      "schema": "public",
+      "values": [
+        "customer",
+        "admin",
+        "seller"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

@@ -1,33 +1,84 @@
+import {
+    boolean,
+    timestamp,
+    varchar,
+    text,
+    pgTable,
+    uuid,
+    serial,
+    pgEnum
+} from "drizzle-orm/pg-core";
 
-import { boolean, timestamp, varchar, text, pgTable, uuid, integer, serial} from "drizzle-orm/pg-core";
+export const roleEnum = pgEnum("role", [
+    "customer",
+    "admin",
+    "seller"
+]);
 
-const userTable = pgTable('users', {
-    id : uuid("id").unique().primaryKey().defaultRandom(),
-    
-    name : varchar('name',{length : 50}).notNull(),
+const userTable = pgTable("users", {
+    id: uuid("id")
+        .primaryKey()
+        .defaultRandom(),
 
-    email : varchar('email', {length : 322}).unique().notNull(),
+    name: varchar("name", {
+        length: 50
+    }).notNull(),
 
-    password : varchar('password').notNull(),
+    email: varchar("email", {
+        length: 322
+    })
+        .unique()
+        .notNull(),
 
-    emailVerified : boolean('email_verified').notNull().default(false),
+    password: varchar("password", {
+        length: 255
+    }).notNull(),
 
-    salt : text('salt'),
+    emailVerified: boolean("email_verified")
+        .notNull()
+        .default(false),
 
-    verificationToken : text('verification_token'),
-    refreshToken : text('refresh_token'),
+    role: roleEnum("role")
+        .notNull()
+        .default("customer"),
 
-    createdAt : timestamp('created_at').defaultNow().notNull(),
-    updatedAt : timestamp('updated_at').defaultNow().$onUpdate(() => new Date())
-})
+    verificationToken: text("verification_token"),
 
-const seat = pgTable('seats', {
-    id : serial('id').primaryKey(),
-    name : varchar('name', {length : 255}).notNull(),
-    isbooked : integer('is_booked').default(0)
+    refreshToken: text("refresh_token"),
+
+    createdAt: timestamp("created_at")
+        .notNull()
+        .defaultNow(),
+
+    updatedAt: timestamp("updated_at")
+        .notNull()
+        .defaultNow()
+});
+
+const seat = pgTable("seats", {
+    id: serial("id").primaryKey(),
+
+    customerId: uuid("customer_id")
+        .references(() => userTable.id, {
+            onDelete: "set null"
+        }),
+
+    name: varchar("name", {
+        length: 255
+    })
+        .notNull()
+        .default(""),
+
+    seatNumber: text("seat_number")
+        .unique()
+        .notNull(),
+
+    isBooked: boolean("is_booked")
+        .notNull()
+        .default(false)
 });
 
 export {
     userTable,
     seat
-} 
+};

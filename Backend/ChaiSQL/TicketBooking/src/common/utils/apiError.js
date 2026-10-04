@@ -35,6 +35,10 @@ class ApiError extends Error {
     static DBNotConnected(message = "Database not connected") {
         throw new ApiError(503, message);
     }
+
+    static isBooked(message = 'Seats is booked'){
+        throw new ApiError(409, message);
+    }
 }
 
 export default ApiError;
