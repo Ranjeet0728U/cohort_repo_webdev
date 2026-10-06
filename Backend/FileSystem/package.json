@@ -1,0 +1,17 @@
+{
+  "name": "filesystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node sync.js",
+    "Ranjeet": "node asyncfile.js"
+  },
+  "keywords": [],
+  "author": "Ranjeet Upadhyay",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "node": "^22.23.3"
+  }
+}
