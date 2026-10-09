@@ -38,19 +38,44 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         crypto.randomBytes(16, function (err, raw) {
             if (err) return cb(err)
+            const fileName = path.parse(file.originalname).name
             const ext = path.extname(file.originalname)
-            cb(null, file.fieldname + '-' + raw.toString('hex')+ ext)
+            cb(null, fileName + '-' + raw.toString('hex')+ ext)
         })
     }
 })
 
 const discUpload = multer({storage : storage})
 
-app.post('/disc-upload', discUpload.single('file'), (req, res) => {
+app.post('/disc-upload', discUpload.single('file'), (req, res) => { // to upload single document in storage
     ApiResponse.ok(res, 'file uploaded success fully', req.file.originalname)
 
 })
 
+app.post('/disc-uploads', discUpload.array('photo'), (req,res) => {// to upload multiple same type documents
+    ApiResponse.ok(res, 'files uploaded successFully', req.files.originalname);
+})
+
+app.post('/disc-files', // to upload multiple type document 
+    discUpload.fields([
+        {name : 'file', maxCount : 2},
+        {name : 'photo', maxCount : 2}
+    ]), 
+    (req, res) => {
+    ApiResponse.ok(res, 'files Uploaded successfully', req.files.filename);
+})
+
+const LimitingUpload = multer({
+    storage : storage,
+    limits : {
+        fileSize : 1024 * 1024 * 2
+    }
+})
+
+app.post('/disc-limit', LimitingUpload.single('file'), (req, res) => { // uploaded with limiting file size
+    ApiResponse.ok(res, 'file uploaded', req.file.originalname);
+    console.log(req.file.originalname)
+})
 
 
 
