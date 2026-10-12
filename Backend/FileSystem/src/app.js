@@ -4,6 +4,7 @@ import multer from 'multer';
 import fs from 'node:fs'
 import path from 'node:path';
 import crypto from 'crypto';
+import ApiError from './common/utils/apiError.js';
 import authRoute from './module/auth/auth.routes.js'
 import ApiResponse from './common/utils/api-respons.js';
 
@@ -68,7 +69,13 @@ app.post('/disc-files', // to upload multiple type document
 const LimitingUpload = multer({
     storage : storage,
     limits : {
-        fileSize : 1024 * 1024 * 2
+        fileSize : 1024 * 1024 * 2 // file maximum size
+    },
+    fileFilter : (req, file, cb) => {
+        const allowedFiles = [ "image/jpeg", "image/png", "application/pdf" ];
+        
+        if(allowedFiles.includes(file.mimetype)) cb(null, true)
+        else cb(ApiError.badRequest('File not allowed'),false)
     }
 })
 
@@ -76,8 +83,6 @@ app.post('/disc-limit', LimitingUpload.single('file'), (req, res) => { // upload
     ApiResponse.ok(res, 'file uploaded', req.file.originalname);
     console.log(req.file.originalname)
 })
-
-
 
 
 app.use('/api/auth', authRoute);
