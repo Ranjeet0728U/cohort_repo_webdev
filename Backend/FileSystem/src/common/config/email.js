@@ -7,7 +7,7 @@ const envPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../.
 dotenv.config({ path: envPath });
 
 const transporter = nodemailer.createTransport({
-    host : 'smpt.example.com',
+    host : 'smtp.example.com',
     port : 587,
     secure : false,
     auth : {

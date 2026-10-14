@@ -10,9 +10,18 @@ import ApiResponse from './common/utils/api-respons.js';
 
 const app = express();
 app.use(express.json())
+app.use((req, res, next) => {
+    console.log("Method:", req.method);
+    console.log("URL:", req.url);
+    console.log("Content-Type:", req.headers["content-type"]);
+    console.log("Parsed body:", req.body);
+
+    next();
+});
+
+app.use(express.urlencoded({ extended: true }));
 
 
-app.use(express.urlencoded({extended : true}))
 app.use(cookieParser());
 
 const upload = multer();

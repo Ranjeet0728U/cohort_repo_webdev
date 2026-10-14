@@ -1,38 +1,78 @@
-// import Joi from "joi";
 import mongoose from "mongoose";
-import role from '../../user.role.js'
+import role from "../../user.role.js";
 
-const userSchema = new mongoose.Schema({
-    name : {
-        type : String,
-        trim : true,
-        minlength : 2,
-        maxlength : 20,
-        required : [true, "unable to find"]
+const userSchema = new mongoose.Schema(
+{
+    name: {
+        type: String,
+        trim: true,
+        minlength: 2,
+        maxlength: 50,
+        required: [true, "Name is required"],
     },
 
-    password :{
-        type : String,
-        minlength : 2,
-        maxlength : 200,
-        select : false,
+    email: {
+        type: String,
+        required: [true, "Email is required"],
+        unique: true,
+        lowercase: true,
+        trim: true,
     },
 
-    role :{
-        type : String,
-        enum : role,
-        default : "Customer"
+    password: {
+        type: String,
+        minlength: 8,
+        maxlength: 200,
+        required: true,
+        select: false,
     },
 
-    isVerified : {
-        type : Boolean,
-        default : false,
+    role: {
+        type: String,
+        enum: role,
+        default: "Customer",
     },
 
-    verificationToken : { type : String, select : false},
-    refreshToken : { type : String, select : false},
-    resetPassowordToken : {type : String , select : false},
-    resetPasswordExpire : {type : Date, select : false},
-},{timestamps : true});
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+
+    verificationToken: {
+        type: String,
+        default: null,
+        select: false,
+    },
+
+    verificationTokenExpiry: {
+        type: Date,
+        default: null,
+        select: false,
+    },
+
+    refreshToken: {
+        type: String,
+        default: null,
+        select: false,
+    },
+
+    resetPasswordToken: {
+        type: String,
+        default: null,
+        select: false,
+    },
+
+    resetPasswordExpire: {
+        type: Date,
+        default: null,
+        select: false,
+    },
+},
+{
+    timestamps: true,
+}
+
+
+);
 
 export default mongoose.model("user", userSchema);
