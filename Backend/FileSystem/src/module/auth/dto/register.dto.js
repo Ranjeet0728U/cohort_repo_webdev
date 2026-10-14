@@ -14,15 +14,14 @@ export class RegisterDto extends basedto{
         email : Joi.string().
                 email().
                 trim().
-                unique().
                 lowercase().
                 required(),
 
         password : Joi.string().
-                    min(6).
-                    max(200).
-                    message("Password is required").
-                    required(),
+                min(6).
+                max(200).
+                message("Password is required").
+                required(),
 
         role : Joi.
                 string().

@@ -58,7 +58,7 @@ const verifyEmail = async (rawToken) => {
 
     if (!user) {
         throw ApiError.badRequest(
-            "Invalid or expired verification link"
+            "Invalid or expired verification lin"
         );
     }
 
@@ -87,9 +87,9 @@ const login = async(email, password) => {
     
     if (!isPasswordValid) throw ApiError.unauthorized("Invalid email or password"); 
 
-    if (!user.isVerified) { 
-        throw ApiError.forbidden( "Please verify your email before logging in" ); 
-    }
+    // if (!user.isVerified) { 
+    //     throw ApiError.forbidden( "Please verify your email before logging in" ); 
+    // }
     const accessToken = token.generateAccessToken({ id: user._id }); 
     const refreshToken = token.generateRefreshToken({ id: user._id });
 

@@ -1,4 +1,4 @@
-import BaseDto from "../../../common/dto/base.dto";
+import BaseDto from '../../../common/dto/base.dto.js'
 import Joi from 'joi'
 
 class verifyDto extends BaseDto{
@@ -6,3 +6,5 @@ class verifyDto extends BaseDto{
         rawToken : Joi.string().required()
     })
 }
+
+export default verifyDto
