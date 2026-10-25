@@ -49,6 +49,10 @@ const userSchema = new mongoose.Schema(
         default: null,
         select: false,
     },
+    avatar: {
+        type: String,
+        default: null
+    },
 
     refreshToken: {
         type: String,

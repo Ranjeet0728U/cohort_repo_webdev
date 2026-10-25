@@ -3,12 +3,15 @@ import express from 'express';
 import multer from 'multer';
 import fs from 'node:fs'
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import crypto from 'crypto';
 import ApiError from './common/utils/apiError.js';
 import authRoute from './module/auth/auth.routes.js'
 import ApiResponse from './common/utils/api-respons.js';
 
 const app = express();
+const frontendPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'frontend');
+
 app.use(express.json())
 app.use((req, res, next) => {
     console.log("Method:", req.method);
@@ -93,6 +96,7 @@ app.post('/disc-limit', LimitingUpload.single('file'), (req, res) => { // upload
     console.log(req.file.originalname)
 })
 
+app.use(express.static(frontendPath));
 
 app.use('/api/auth', authRoute);
 

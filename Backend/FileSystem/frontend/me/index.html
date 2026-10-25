@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7fb">
+  <title>My profile</title>
+  <link rel="stylesheet" href="/assets/auth.css">
+  <script src="/assets/profile.js" defer></script>
+</head>
+<body>
+  <main class="auth-card profile-card">
+    <p class="eyebrow">YOUR ACCOUNT</p>
+    <h1>My profile</h1>
+    <p class="intro">Your account details and status.</p>
+    <p class="form-status" data-profile-status role="status" aria-live="polite">Loading your profile…</p>
+    <section class="profile-details" data-profile-details hidden aria-label="Profile details">
+      <div class="profile-avatar" data-profile-avatar aria-hidden="true"></div>
+      <dl>
+        <div class="profile-row">
+          <dt>Name</dt>
+          <dd data-profile-name></dd>
+        </div>
+        <div class="profile-row">
+          <dt>Email</dt>
+          <dd data-profile-email></dd>
+        </div>
+        <div class="profile-row">
+          <dt>Account type</dt>
+          <dd data-profile-role></dd>
+        </div>
+        <div class="profile-row">
+          <dt>Email status</dt>
+          <dd data-profile-verification></dd>
+        </div>
+        <div class="profile-row">
+          <dt>Member since</dt>
+          <dd data-profile-created></dd>
+        </div>
+      </dl>
+    </section>
+    <p class="form-footer"><a href="/upload/">Upload or change your profile image</a></p>
+    <div class="profile-actions" data-profile-actions hidden>
+      <button class="button" type="button" data-logout>Log out</button>
+    </div>
+    <p class="form-footer"><a href="/login/">Log in</a> · <a href="/">Back to home</a></p>
+  </main>
+</body>
+</html>

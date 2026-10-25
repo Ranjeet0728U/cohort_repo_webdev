@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7fb">
+  <title>Verify email</title>
+  <link rel="stylesheet" href="/assets/auth.css">
+  <script src="/assets/verify.js" defer></script>
+</head>
+<body>
+  <main class="auth-card">
+    <p class="eyebrow">ONE LAST STEP</p>
+    <h1>Verify your email</h1>
+    <p class="intro">Open the verification link in your email. If you have a verification token, you can also enter it below.</p>
+    <section class="resend-section" aria-labelledby="resend-heading">
+      <h2 id="resend-heading">Need a new link?</h2>
+      <div class="field">
+        <label for="resendEmail">Email address</label>
+        <input id="resendEmail" type="email" autocomplete="email" data-resend-email required>
+      </div>
+      <button class="button button-secondary" type="button" data-resend-verification>Send new verification link</button>
+      <p class="form-status" data-resend-status role="status" aria-live="polite"></p>
+    </section>
+    <form data-verify-form>
+      <div class="field">
+        <label for="rawToken">Verification token</label>
+        <input id="rawToken" name="rawToken" type="text" autocomplete="one-time-code" required>
+      </div>
+      <button class="button" type="submit">Verify email</button>
+      <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+    </form>
+    <p class="form-footer">Already verified? <a href="/login/">Log in</a></p>
+  </main>
+</body>
+</html>

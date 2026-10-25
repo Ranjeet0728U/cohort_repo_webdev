@@ -3,10 +3,9 @@ import {verifyAccessToken} from '../../common/utils/jwt.token.js'
 import Users from './auth.model.js'
 
 const authenticate = async (req, res, next) => {
-    let token;
-    if(req.headers.authorization?.startWith("Bearer")) {
-        token = req.headers.authorization.split(" "[1])
-    }
+    const authorization = req.headers.authorization;
+    const token = req.cookies?.accessToken ||
+        (authorization?.startsWith("Bearer ") ? authorization.slice(7) : null);
 
     if(!token){
         throw ApiError.unauthorized("Not authenticated")
@@ -20,7 +19,7 @@ const authenticate = async (req, res, next) => {
         id : user._id,
         role : user.role,
         name : user.name,
-        email : user.name,
+        email : user.email,
     }
 
     next();

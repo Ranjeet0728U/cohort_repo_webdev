@@ -27,10 +27,9 @@ const verifyAccessToken = (data) => {//return payload
 
 
 const generateResetToken = () => {
-    const rawToken = crypto.randomBytes(32).toString('hex');
-
-    const HashedToken = crypto.createHash('sha256').update(rawToken).digest('hex')
-    return {rawToken, HashedToken}
+    const rawToken = crypto .randomInt(0, 1000000) .toString() .padStart(6, '0');
+    const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex')
+    return {rawToken, hashedToken}
 }
 
 export {

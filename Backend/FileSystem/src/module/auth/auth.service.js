@@ -4,12 +4,17 @@ import * as token from '../../common/utils/jwt.token.js'
 import users from './auth.model.js'
 import * as Email from '../../common/config/email.js'
 import bcrypt from 'bcrypt'
+import fs from 'node:fs'
+import imagekit from '../../common/config/imagekit.js'
 
 const hashedToken = (token) =>crypto.createHash('sha256').update(token).digest('hex')
 
 const register = async({name, email, password, role}) => {
     if (typeof email !== "string" || !email.trim()) {
         throw ApiError.badRequest("Email is required");
+    }
+    if (process.env.NODE_ENV === 'production' && !process.env.SMTP_HOST) {
+        throw new ApiError(503, "Email verification is not configured");
     }
     email = email.trim().toLowerCase()
     
@@ -31,7 +36,15 @@ const register = async({name, email, password, role}) => {
         verificationToken : hashedVerificationToken,
         verificationTokenExpiry: new Date( Date.now() + 15 * 60 * 1000 )
     });
-    
+
+    if (process.env.SMTP_HOST) {
+        try {
+            await Email.sendVerificationEmail(email, rawToken);
+        } catch (error) {
+            await User.deleteOne();
+            throw new ApiError(503, "Could not send the verification email. Please try again.");
+        }
+    }
 
     const userObj = User.toObject()
 
@@ -39,26 +52,36 @@ const register = async({name, email, password, role}) => {
     delete userObj.verificationToken
     delete userObj.verificationTokenExpiry;
     delete userObj.refreshToken;
-    console.log("The raw Token is : - ", rawToken)
-    return userObj
+    return {
+        user: userObj,
+        ...(!process.env.SMTP_HOST && process.env.NODE_ENV !== 'production'
+            ? { verificationToken: rawToken }
+            : {}),
+    };
 }
 
 
 const verifyEmail = async (rawToken) => {
-    if (!rawToken || typeof rawToken !== 'string') {
-        throw ApiError.badRequest("Verification token is required");
+    if (!rawToken || typeof rawToken !== "string") {
+        throw ApiError.badRequest(
+            "Verification token is required"
+        );
     }
 
     const hashed = hashedToken(rawToken);
 
     const user = await users.findOne({
         verificationToken: hashed,
-        verificationTokenExpiry: { $gt: new Date() },
-    }).select("+verificationToken +verificationTokenExpiry")
+        verificationTokenExpiry: {
+            $gt: new Date()
+        }
+    }).select(
+        "+verificationToken +verificationTokenExpiry"
+    );
 
     if (!user) {
         throw ApiError.badRequest(
-            "Invalid or expired verification lin"
+            "Invalid or expired verification token"
         );
     }
 
@@ -66,14 +89,16 @@ const verifyEmail = async (rawToken) => {
     user.verificationToken = null;
     user.verificationTokenExpiry = null;
 
-    await user.save({ validateBeforeSave: false });
+    await user.save({
+        validateBeforeSave: false
+    });
 
     return {
-        message: "Email verified successfully. You can now log in.",
+        message: "Email verified successfully. You can now log in."
     };
 };
 
- 
+
 const login = async(email, password) => {
     email = email.trim().toLowerCase()
 
@@ -85,11 +110,10 @@ const login = async(email, password) => {
     
     const isPasswordValid = await bcrypt.compare( password, user.password );
     
-    if (!isPasswordValid) throw ApiError.unauthorized("Invalid email or password"); 
-
-    // if (!user.isVerified) { 
-    //     throw ApiError.forbidden( "Please verify your email before logging in" ); 
-    // }
+    if(!isPasswordValid) throw ApiError.unauthorized("Invalid email or password");
+    if (!user.isVerified) {
+        throw ApiError.forbidden("Please verify your email before logging in");
+    }
     const accessToken = token.generateAccessToken({ id: user._id }); 
     const refreshToken = token.generateRefreshToken({ id: user._id });
 
@@ -185,7 +209,105 @@ const reSetPassword = async (rawToken, newPassword) => {
 const getMe = async (userId) => {
     const user = await users.findById(userId);
     if(!user) throw ApiError.notFound("User not found")
-    return user;
+    return {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isVerified: user.isVerified,
+        avatar: user.avatar,
+        createdAt: user.createdAt,
+    };
+}
+
+
+const deleteUser = async (req, res) => {
+    try {
+        const result = await authService.deleteUser(req.user.id);
+
+        return ApiRes.ok(res, result.message);
+    } catch (err) {
+        return res.status(err.statusCode || 500).json({
+            success: false,
+            message: err.message || "Internal server error"
+        });
+    }
+};
+
+
+const resendVerificationEmail = async (email) => {
+    email = email.trim().toLowerCase();
+
+    const user = await users.findOne({ email })
+        .select("+verificationToken +verificationTokenExpiry");
+
+    if (!user) {
+        throw ApiError.noUser("User not found");
+    }
+
+    if (user.isVerified) {
+        throw ApiError.badRequest("Email is already verified");
+    }
+
+    // Generate a new 6-digit token
+    const { rawToken, hashedToken: hashedVerificationToken } =
+        token.generateResetToken();
+
+    // Save the new hashed token and expiry
+    user.verificationToken = hashedVerificationToken;
+    user.verificationTokenExpiry = new Date(
+        Date.now() + 15 * 60 * 1000
+    );
+    console.log(rawToken)
+
+    await user.save({ validateBeforeSave: false });
+
+    // try {
+    //     await Email.sendVerificationEmail(email, rawToken);
+    // } catch (error) {
+    //     throw new ApiError(
+    //         503,
+    //         "Failed to send verification email"
+    //     );
+    // }
+
+    return {
+        message: "A new verification email has been sent"
+    };
+};
+
+
+const avatarUpload = async(userId, file) => {
+    try{
+        const fileStream = fs.createReadStream(file.path);
+
+        const uploadResponse = await imagekit.files.upload({
+            file : fileStream,
+            fileName : file.filename,
+            folder : "/Ranjeet"
+        })
+
+        const updatedUser = await users.findByIdAndUpdate(
+            userId,
+            {avatar : uploadResponse.url},
+            {new : true}
+        )
+
+        if(!updatedUser){
+            throw ApiError.noUser("user not found")
+        }
+
+        return {
+            url : uploadResponse.url,
+            fileId : uploadResponse.fileId
+        }
+    }catch(err){
+        throw err;
+    } finally {
+        if (file.path && fs.existsSync(file.path)) {
+            fs.unlinkSync(file.path);
+        }
+    }
 }
 
 export {
@@ -197,5 +319,8 @@ export {
     logOut,
     forgetPassword,
     reSetPassword,
-    getMe
+    getMe,
+    deleteUser,
+    resendVerificationEmail,
+    avatarUpload,
 }
