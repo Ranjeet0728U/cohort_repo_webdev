@@ -1,10 +1,9 @@
 
-import multer from "multer";
-import fs from "node:fs";
-import crypto from "node:crypto";
-import path from "node:path";
-
-const uploadPath = "./src/module/file-upload";
+import multer from "multer"
+import fs from "node:fs"
+import crypto from "node:crypto"
+import path from "node:path"
+import uploadPath from "./src/module/file-upload.js"
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -29,7 +28,7 @@ const storage = multer.diskStorage({
             cb(null, `${fileName}-${raw.toString("hex")}${ext}`);
         });
     }
-});
+})
 
 const fileFilter = (req, file, cb) => {
     const allowedFiles = [
@@ -44,7 +43,7 @@ const fileFilter = (req, file, cb) => {
     }
 
     return cb(new Error(`File type not allowed: ${file.mimetype}`));
-};
+}
 
 export const upload = multer({
     storage,
@@ -52,4 +51,4 @@ export const upload = multer({
         fileSize: 10 * 1024 * 1024
     },
     fileFilter
-});
+})
