@@ -26,6 +26,7 @@ const register = async({name, email, password, role}) => {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const { rawToken, hashedToken: hashedVerificationToken } = token.generateResetToken();
+    console.log("rawToken: - ", rawToken)
     
 
     const User = await users.create({
@@ -252,7 +253,7 @@ const resendVerificationEmail = async (email) => {
     // Generate a new 6-digit token
     const { rawToken, hashedToken: hashedVerificationToken } =
         token.generateResetToken();
-
+    console.log("rawToken: - ", rawToken);
     // Save the new hashed token and expiry
     user.verificationToken = hashedVerificationToken;
     user.verificationTokenExpiry = new Date(

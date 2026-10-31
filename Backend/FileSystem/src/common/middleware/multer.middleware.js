@@ -43,13 +43,13 @@ const fileFilter = (req, file, cb) => {
         return cb(null, true);
     }
 
-    return cb(new Error("File type not allowed"));
+    return cb(new Error(`File type not allowed: ${file.mimetype}`));
 };
 
 export const upload = multer({
     storage,
     limits: {
-        fileSize: 5 * 1024 * 1024
+        fileSize: 10 * 1024 * 1024
     },
     fileFilter
 });
