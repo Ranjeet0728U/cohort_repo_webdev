@@ -3,7 +3,7 @@ import multer from "multer"
 import fs from "node:fs"
 import crypto from "node:crypto"
 import path from "node:path"
-import uploadPath from "./src/module/file-upload.js"
+import uploadPath from "../../module/auth/file-upload.js"
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

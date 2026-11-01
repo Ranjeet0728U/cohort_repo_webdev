@@ -3,29 +3,29 @@ import basedto from '../../../common/dto/base.dto.js'
 import user from '../../../user.role.js'
 
 export class RegisterDto extends basedto{
-    static schema = Joi.object({
+        static schema = Joi.object({
         
-        name : Joi.string().
+                name : Joi.string().
                 trim().
                 min(2).
                 max(50).
                 required(),
 
-        email : Joi.string().
+                email : Joi.string().
                 email().
                 trim().
                 lowercase().
                 required(),
 
-        password : Joi.string().
+                password : Joi.string().
                 min(6).
                 max(200).
                 message("Password is required").
                 required(),
 
-        role : Joi.
+                role : Joi.
                 string().
                 valid(...user).
                 required(),
-    })
+        })
 }
