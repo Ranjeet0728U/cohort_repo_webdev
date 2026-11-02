@@ -4,7 +4,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import authRoute from './module/auth/auth.routes.js'
 import ipl_owner from './module/ipl-ms/router/owner.router.js'
-import ipl_team from './module/ipl-ms/router/player.router.js'
+import ipl_player from './module/ipl-ms/router/player.router.js'
+import ipl_team from './module/ipl-ms/router/team.router.js'
 
 const app = express();
 const frontendPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'frontend');
@@ -29,5 +30,6 @@ app.use(express.static(frontendPath));
 app.use('/api/auth', authRoute);
 app.use('/ipl/owner',ipl_owner);
 app.use('/ipl/team', ipl_team)
+app.use('/ipl/player', ipl_player)
 
 export default app;
