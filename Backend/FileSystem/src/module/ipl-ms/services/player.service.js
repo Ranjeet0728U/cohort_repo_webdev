@@ -2,6 +2,15 @@ import ApiError from "../../../common/utils/apiError.js";
 import Team from "../model/team.model.js"
 import Player from "../model/player.model.js"
 
+const showAllPlayer = async() => {
+    const player = await Player.find();
+    
+    if(!player)
+        throw ApiError.noUser("No player is found in DB")
+
+    return player
+}
+
 const addPlayer = async ({name, role, teamId}) => {
     const player = await Player.create({name, role, teamId})
 
@@ -27,8 +36,21 @@ const transferPlayer = async ({PlayerId, newTeamId}) => {
     return player
 }
 
+const playerRoleChange = async({playerId, newRole}) => {
+    const player = Player.findByIdAndUpdate(playerId, 
+        {role : newRole},
+        {new : true, runValidators : true}
+    ).populate("name","teamId");
+
+    if(!player) throw ApiError.noUser("No Player Found for this PlayerId")
+    
+    return player
+}
+
 
 export {
+    showAllPlayer,
     addPlayer,
-    transferPlayer
+    transferPlayer,
+    playerRoleChange
 }
