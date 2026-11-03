@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const teamSceama = new mongoose.Schema({
+const teamScheama = new mongoose.Schema({
     name : {
         type : String,
         trim : true,
@@ -15,4 +15,4 @@ const teamSceama = new mongoose.Schema({
     }
 }, {timestamps : true})
 
-export default mongoose.model( "Team", teamSceama )
+export default mongoose.model( "Team", teamScheama)
