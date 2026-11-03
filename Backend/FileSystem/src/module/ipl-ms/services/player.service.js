@@ -3,7 +3,7 @@ import Team from "../model/team.model.js"
 import Player from "../model/player.model.js"
 
 const showAllPlayer = async() => {
-    const player = await Player.find();
+    const player = await Player.find().populate("teamId", "name");
     
     if(!player)
         throw ApiError.noUser("No player is found in DB")
@@ -24,9 +24,10 @@ const transferPlayer = async ({PlayerId, newTeamId}) => {
 
     if(!newTeam) 
         throw ApiError.badRequest("No team found")
+    
     const player = await Player.findByIdAndUpdate(
-        id,
-        {teamId : newTeamId},
+        PlayerId,
+        { $set: {teamId : newTeamId}},
         {new : true, runValidators : true}
     ).populate('teamId', 'name')
 

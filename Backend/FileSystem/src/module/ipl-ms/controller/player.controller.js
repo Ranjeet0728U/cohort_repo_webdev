@@ -3,7 +3,7 @@ import * as playerService from '../services/player.service.js'
 
 const AllPlayer = async (req, res) => {
     try{
-        const allPlayer = playerService.showAllPlayer()
+        const allPlayer = await playerService.showAllPlayer()
         ApiRes.ok(res, "All Register Player: - ", allPlayer)
     }catch(err) {
         res.status(err.statuscode).json({
@@ -11,7 +11,6 @@ const AllPlayer = async (req, res) => {
             message : err.message
         })
     }
-
 }
 
 
@@ -35,9 +34,9 @@ const transferPlayer = async (req, res) => {
         ApiRes.ok(res, "Player successFully transfered", player)
     }
     catch (err){
-        res.status(err.status).json({
+        res.status(err.statuscode || 500).json({
             success : false,
-            message : err.message
+            message : err.message || "network err"
         })
     }
 }

@@ -9,7 +9,7 @@ router.get('/', authenticate, controller.AllPlayer)
 
 router.post('/', authenticate, controller.addPlayer)
 
-router.post('/playerTransfer', authenticate, controller.transferPlayer)
+router.patch('/playerTransfer', authenticate, controller.transferPlayer)
 
 
 export default router

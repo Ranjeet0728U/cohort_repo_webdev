@@ -2,8 +2,8 @@ import ApiError from "../../../common/utils/apiError.js";
 import Team from '../model/team.model.js'
 
 
-const addTeam = async({name, teamId}) => {
-    if(!name || !teamId) 
+const addTeam = async({name, CompanyId}) => {
+    if(!name || !CompanyId) 
         throw ApiError.badRequest("name or teamId missing")
 
     const team = await Team.findOne({name})
@@ -11,7 +11,7 @@ const addTeam = async({name, teamId}) => {
     if(team)
         throw ApiError.conflict('Team name already exist')
 
-    const player = await Team.create({name, teamId})
+    const player = await Team.create({name, CompanyId})
 
     if(!player)
         throw ApiError.noUser("team not create")
