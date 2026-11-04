@@ -1,21 +1,29 @@
 import ApiError from "../../../common/utils/apiError.js";
 import Team from '../model/team.model.js'
+import Owner from '../model/owner.model.js'
 
 
-const addTeam = async({name, CompanyId}) => {
-    if(!name || !CompanyId) 
-        throw ApiError.badRequest("name or teamId missing")
+const addTeam = async({name, OwnerId}) => {
+    if(!name || !OwnerId) 
+        throw ApiError.badRequest("name or OwnerId missing")
 
-    const team = await Team.findOne({name})
+    const owner = await Owner.findById(OwnerId)
 
-    if(team)
+    if(!owner) {
+        throw ApiError.notFound("owner not found")
+    }
+
+    const existingTeam = await Team.findOne({name})
+
+    if(existingTeam)
         throw ApiError.conflict('Team name already exist')
 
-    const player = await Team.create({name, CompanyId})
+    const team = await Team.create({name, OwnerId})
 
-    if(!player)
+    if(!team)
         throw ApiError.noUser("team not create")
-    return player
+
+    return team
 }
 
 

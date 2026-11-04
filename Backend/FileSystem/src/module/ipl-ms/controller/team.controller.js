@@ -6,9 +6,9 @@ const addTeam = async (req, res) =>{
         const players = await controller.addTeam(req.body)
         ApiResponse.created(res, "team got created", players)
     }catch (err) {
-        return res.status(err.statusCode).json({
+        return res.status(err.statusCode || 500).json({
             success : false,
-            message : err.message
+            message : err.message || "Internal Server Error"
         })
     }
 }
@@ -20,7 +20,7 @@ const getAllTeams = async (req, res) => {
     }catch (err){
         return res.status(err.statusCode || 500).json({
             success : false,
-            message : err.message
+            message : err.message || "Interal Server error"
         })
     }
 }

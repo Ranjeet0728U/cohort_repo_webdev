@@ -8,7 +8,7 @@ const teamScheama = new mongoose.Schema({
         minlength : 2,
         maxlength : 255,
     },
-    CompanyId : {
+    OwnerId : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "Owner",
         required : [true, "teamId is required"]
