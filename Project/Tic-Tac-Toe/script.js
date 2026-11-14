@@ -7,6 +7,7 @@ let array = [
 ];
 
 document.querySelectorAll('.inner-container').forEach((ele) =>{
+    
     ele.addEventListener('click', () =>{
         
         const element = addText(ele);

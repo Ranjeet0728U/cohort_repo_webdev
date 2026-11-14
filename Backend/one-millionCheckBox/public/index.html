@@ -5,38 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1-Million checkbox</title>
     <style>
-        *{
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
             background-color: rgb(180, 195, 175);
             color: blue;
+            font-family: Arial, sans-serif;
         }
 
-        .heading{
+        .heading {
             text-align: center;
+            padding: 20px 10px;
         }
 
-        .heading h1{
+        .heading h1 {
             display: inline-block;
             background-color: aqua;
             border-radius: 10px;
-            padding-left: 20px;
-            padding-right: 20px;
+            padding: 10px 20px;
+            font-size: clamp(1.4rem, 4vw, 2.5rem);
         }
 
-        .outerbox{
-            background-color: rgb(76, 64, 206);
+        #outerbox {
+            background-color: rgb(193, 247, 221);
+        
+            display: grid;
+        
+            grid-template-columns: repeat(
+                auto-fill,
+                minmax(20px, 1fr)
+            );
+        
+            gap: clamp(5px, 1vw, 10px);
+        
+            width: min(90%, 1200px);
+        
+            margin: 30px auto;
+        
+            padding: clamp(15px, 4vw, 50px);
+        
+            border-radius: 10px;
         }
+
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+        }
+
+        .box input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+            accent-color: blue;
+        }
+
+        /* Tablet */
+        @media (max-width: 768px) {
+        
+            #outerbox {
+                width: 95%;
+                gap: 6px;
+            }
+        
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+        
+            .heading h1 {
+                padding: 8px 15px;
+            }
+        
+            #outerbox {
+                width: 96%;
+                padding: 12px;
+                gap: 5px;
+            }
+        
+            .box input[type="checkbox"] {
+                width: 13px;
+                height: 13px;
+            }
+        
+        }
+
     </style>
 </head>
 <body>
     <div class="heading">
         <h1>1 Million CheckBox</h1>
     </div>
-    <div class="outerbox">
+    <div id="outerbox">
 
     </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        
+        const box = document.getElementById('outerbox')
+
+        const checkbox = () => {
+            for(let i = 0; i < 1000; i++){
+                const div = document.createElement('div')
+                div.classList.add('box')
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox'
+                checkbox.value = 'check'
+
+                checkbox.addEventListener('change', () => {
+                    socket.emit('box:select', {
+                        index :i, 
+                        checked :checkbox.checked
+                    });
+                })
+
+                div.appendChild(checkbox)
+                box.appendChild(div)
+            }
+        };
+        socket.on('connect', () => {
+            if(box.children.length === 0) checkbox();
+        });
+
+        
+
+        socket.on('server:select', ({index, checked})=> {
+            const checkbox = document.querySelectorAll('.box input[type="checkbox"]')[index];
+            checkbox.checked = checked
+        })
+    </script>
 </body>
-
-<script>
-
-</script>
 </html>
