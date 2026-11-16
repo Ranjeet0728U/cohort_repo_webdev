@@ -1,7 +1,14 @@
-import express from 'express'
 import http from 'http'
-import { Server } from 'socket.io';
 import path from 'node:path'
+
+import express from 'express'
+import { Server } from 'socket.io';
+
+const size = 100000;
+
+const checkBoxArr = {
+    arr : new Array(size).fill(false)
+}
 
 const main = (() => {
     const app = express();
@@ -13,17 +20,22 @@ const main = (() => {
     io.attach(server);
 
     io.on('connection', (socket) => {
-        socket.on('box:select', ({index, checked}) => {
-            socket.broadcast.emit('server:select',{
-                index,
-                checked
-            });
+        socket.on('client:select', (data) => {
+            const {index, checked} = data;
+            checkBoxArr.arr[index] = checked;
+            socket.broadcast.emit('server:check', data)
         })
     })
+
+    app.get('/api/checkboxes', (req, res) => res.send(checkBoxArr))
 
     server.listen(8000, () => {
         console.log('app is running')
     })
-})()
+})
+
+main();
+
+
 
 
