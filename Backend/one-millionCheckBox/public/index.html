@@ -108,38 +108,40 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-        
-        const box = document.getElementById('outerbox')
 
-        const checkbox = () => {
-            for(let i = 0; i < 1000; i++){
-                const div = document.createElement('div')
-                div.classList.add('box')
+        const box = document.getElementById('outerbox');
+
+        window.addEventListener('load', async() => {
+            const res = await fetch('/api/checkboxes', {method: 'GET'})
+            const {arr} = await res.json();
+
+            arr.forEach((ele, index) => {
                 const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox'
-                checkbox.value = 'check'
-
+                checkbox.setAttribute('type', 'checkbox')
+                checkbox.setAttribute('id', `box-${index}`);
+                checkbox.checked = ele
                 checkbox.addEventListener('change', () => {
-                    socket.emit('box:select', {
-                        index :i, 
-                        checked :checkbox.checked
-                    });
+                    socket.emit('client:select', {
+                        index : index,
+                        checked : checkbox.checked
+                    })
                 })
 
-                div.appendChild(checkbox)
-                box.appendChild(div)
-            }
-        };
-        socket.on('connect', () => {
-            if(box.children.length === 0) checkbox();
-        });
+                box.append(checkbox);
+            });
 
-        
 
-        socket.on('server:select', ({index, checked})=> {
-            const checkbox = document.querySelectorAll('.box input[type="checkbox"]')[index];
-            checkbox.checked = checked
         })
+
+
+        // Receive updates from server
+        socket.on('server:check', ({ index, checked }) => {
+        
+            const checkbox = document.getElementById(`box-${index}`);
+
+            checkbox.checked = checked;
+        
+        });
     </script>
 </body>
 </html>
