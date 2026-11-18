@@ -5,15 +5,14 @@ import 'dotenv/config'
 import express from 'express'
 import { Server } from 'socket.io';
 
-import { publisher, subscriber } from './redish-connection.js';
+import { publisher, subscriber, redis } from './redish-connection.js';
 
 const port = process.env.PORT ?? 8080
+const map = new Map();
 
 const size = 100000;
 
-const checkBoxArr = {
-    arr : new Array(size).fill(false)
-}
+const CHECKBOX_STATE_KEY = 'checkbox-state';
 
 const main = async () => {
     const app = express();
@@ -28,7 +27,6 @@ const main = async () => {
     subscriber.on('message', (channel, message) => {
         if(channel === 'internal-server:checkbox:change'){
             const {index, checked} = JSON.parse(message);
-            checkBoxArr.arr[index] = checked;
             io.emit('server:check', {index, checked})
         }
     })
@@ -36,6 +34,32 @@ const main = async () => {
     io.on('connection', (socket) => {
         socket.on('client:select', async(data) => {
 
+            const lastOperationTime = map.get(socket.id);
+
+            if(lastOperationTime){
+                const timeGap = Date.now() - lastOperationTime
+
+                if(timeGap < 5 * 1000){
+                    socket.emit('server:error',{
+                        index : data.index,
+                        message : 'please wait for 5 sec'
+                    })
+                }
+            }
+            map.set(socket.id, Date.now());
+
+            const existingState = await redis.get(CHECKBOX_STATE_KEY)
+
+            if(existingState){
+                const remoteData = JSON.parse(existingState);
+                remoteData[data.index] = data.checked;
+                await redis.set(CHECKBOX_STATE_KEY, JSON.stringify(remoteData));
+            }else{
+                await redis.set(
+                    CHECKBOX_STATE_KEY,
+                    JSON.stringify(new Array(size).fill(false))
+                )
+            }
             await publisher.publish(
                 'internal-server:checkbox:change',
                 JSON.stringify(data)
@@ -43,10 +67,20 @@ const main = async () => {
         })
     })
 
-    app.get('/api/checkboxes', (req, res) => res.send(checkBoxArr))
+    app.get('/api/checkboxes', async(req, res) => {
+
+        const existingState = await redis.get(CHECKBOX_STATE_KEY)
+        if(existingState){
+
+            const remoteData = JSON.parse(existingState);
+            return res.json({checkbox : remoteData})
+        }else {
+            return res.json({checkbox : new Array(size).fill(false)});
+        }
+    })
 
     server.listen(port, () => {
-        console.log('app is running', port)
+        console.log(`http://localhost:${port}`)
     })
 }
 

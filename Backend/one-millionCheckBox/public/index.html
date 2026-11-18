@@ -101,7 +101,7 @@
     <div class="heading">
         <h1>1 Million CheckBox</h1>
     </div>
-    <div id="outerbox">
+    <div id="box">
 
     </div>
 
@@ -109,13 +109,13 @@
     <script>
         const socket = io();
 
-        const box = document.getElementById('outerbox');
+        const box = document.getElementById('box');
 
-        window.addEventListener('load', async() => {
+        const fetching = async() => {
             const res = await fetch('/api/checkboxes', {method: 'GET'})
-            const {arr} = await res.json();
+            const {checkbox} = await res.json();
 
-            arr.forEach((ele, index) => {
+            checkbox.forEach((ele, index) => {
                 const checkbox = document.createElement('input');
                 checkbox.setAttribute('type', 'checkbox')
                 checkbox.setAttribute('id', `box-${index}`);
@@ -129,8 +129,14 @@
 
                 box.append(checkbox);
             });
+        }
 
+        window.addEventListener('load', async() => {
+            await fetching()
+        })
 
+        socket.on('server:error', (data) => {
+            alert(`${data.message}`)
         })
 
 
